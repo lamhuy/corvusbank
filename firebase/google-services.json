@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "274350897566",
+    "project_id": "corvusbank",
+    "storage_bucket": "corvusbank.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:274350897566:android:1e8c026c41afebf7203e8f",
+        "android_client_info": {
+          "package_name": "bank.corvus.saving"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1Ahsonj1SDlZX_5npXzlt4QGfghUUcjk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
