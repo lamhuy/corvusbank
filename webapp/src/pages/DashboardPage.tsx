@@ -52,12 +52,19 @@ const DashboardPage: React.FC = () => {
     history.push('/login');
   };
 
+  const username = user?.email?.split('@')[0] || '';
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle>Dashboard</IonTitle>
           <IonButtons slot="end">
+            {username && (
+              <IonText style={{ alignSelf: 'center', marginRight: '10px', fontWeight: '500' }}>
+                Hi, {username}
+              </IonText>
+            )}
             <IonButton onClick={handleLogout}>
               <IonIcon slot="icon-only" icon={logOutOutline} />
             </IonButton>
