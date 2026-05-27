@@ -23,13 +23,21 @@ const AccountDetailsPage: React.FC = () => {
   useEffect(() => {
     if (!user || !accountId) return;
     
+    let unsubAccount: any = () => {};
+    
     // Subscribe to account
-    const unsubAccount = subscribeToUserAccount(user.uid, (data) => {
-      if (data && data.id === accountId) {
-        setAccount(data);
+    const setupAccountSub = async () => {
+      const unsub = await subscribeToUserAccount(user.uid, (data) => {
+        if (data && data.id === accountId) {
+          setAccount(data);
+        }
+        setLoading(false);
+      });
+      if (typeof unsub === 'function') {
+        unsubAccount = unsub;
       }
-      setLoading(false);
-    });
+    };
+    setupAccountSub();
 
     // Subscribe to transactions
     const unsubTx = subscribeToTransactions(accountId, (data) => {
@@ -37,8 +45,8 @@ const AccountDetailsPage: React.FC = () => {
     });
 
     return () => {
-      unsubAccount();
-      unsubTx();
+      if (unsubAccount) unsubAccount();
+      if (unsubTx) unsubTx();
     };
   }, [user, accountId]);
 
