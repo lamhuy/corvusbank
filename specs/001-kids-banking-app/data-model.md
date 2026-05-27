@@ -1,27 +1,79 @@
-# Data Model: Kids Banking App
+# Data Model: Kids Banking App Web App
 
-## Entities (Firestore Collections)
+This document defines the Firestore collection schemas, validation rules, and state transitions utilized by both the mobile and web banking applications.
 
-### 1. `users`
-Represents the child account holder.
-- `id` (String): Firebase Auth UID.
-- `username` (String): Unique username chosen during sign up.
-- `createdAt` (Timestamp): Account creation time.
+## Entities and Schemas
 
-### 2. `accounts`
-Represents the savings account.
-- `id` (String): Unique account ID (or can use User UID if 1:1 mapping).
-- `userId` (String): Reference to the `users` collection.
-- `balance` (Number): Current balance (stored in cents/smallest currency unit to avoid floating-point errors).
-- `interestRate` (Number): APY percentage (e.g., 5.0 for 5%).
-- `ytdInterest` (Number): Total interest earned year-to-date.
-- `lastInterestCalculation` (Timestamp): Date of the last daily interest calculation.
+### 1. User
+Represents a registered user profile.
 
-### 3. `transactions`
-Represents financial activities on the account.
-- `id` (String): Unique transaction ID.
-- `accountId` (String): Reference to the `accounts` collection.
-- `amount` (Number): Transaction amount (positive for deposit/interest, negative for withdrawal).
-- `type` (String): "DEPOSIT", "WITHDRAWAL", or "INTEREST".
-- `date` (Timestamp): Date and time of the transaction.
-- `description` (String): Human-readable description (e.g., "Allowance Deposit", "Daily Interest").
+- **Firestore Collection**: `users`
+- **Document ID**: Auth User UID (`uid`)
+- **Schema**:
+  ```typescript
+  interface UserProfile {
+    username: string;   // Unique, lowercase string representing the user's username
+    createdAt: Date;    // Timestamp when the user registered
+  }
+  ```
+
+### 2. Account
+Represents the savings account belonging to a user.
+
+- **Firestore Collection**: `accounts`
+- **Document ID**: Auto-generated string
+- **Schema**:
+  ```typescript
+  interface SavingsAccount {
+    userId: string;                   // References the User document ID (uid)
+    balance: number;                  // Current balance in cents (integer)
+    interestRate: number;             // APY percentage, e.g. 5.0 for 5% APY
+    ytdInterest: number;              // Year-to-Date interest earned in cents (integer)
+    lastInterestCalculation: Date;    // Timestamp of the last interest calculation
+  }
+  ```
+
+### 3. Transaction
+Represents a ledger entry of deposits or interest payouts on an account.
+
+- **Firestore Collection**: `transactions`
+- **Document ID**: Auto-generated string
+- **Schema**:
+  ```typescript
+  interface Transaction {
+    accountId: string;                // References the Account document ID
+    amount: number;                   // Transaction amount in cents (integer)
+    type: 'DEPOSIT' | 'INTEREST';     // Type of ledger transaction
+    date: Date | firebase.firestore.FieldValue; // Timestamp of execution
+    description: string;              // Human-readable summary (e.g. "Deposit", "Daily Interest")
+  }
+  ```
+
+## Validation Rules
+
+### Username
+- **Uniqueness**: Enforced before registration by querying the `users` collection for existing documents with the same lowercase username value.
+- **Length**: Minimum 3 characters.
+- **Format**: Lowercase letters, numbers, and basic symbols (automatically lowercased upon receipt).
+
+### PIN / Password
+- **Format**: Exactly 4 numeric digits (`/^\d{4}$/`).
+- **Firebase Adaptation**: Firebase Auth requires passwords to be at least 6 characters. To adapt, the application appends `"00"` to the user's 4-digit PIN prior to authentication calls (`auth.ts`).
+
+### Deposits
+- **Amount**: Must be a positive integer greater than zero (minimum 1 cent).
+- **Scale**: Represented in cents to prevent IEEE 754 floating-point inaccuracies.
+
+## State Transitions and Workflows
+
+```mermaid
+stateDiagram-v2
+    [*] --> Unauthenticated: Open App
+    Unauthenticated --> Authenticated: Sign Up (New User) / Login (Existing User)
+    Authenticated --> Dashboard: Render Home
+    Dashboard --> AccountDetails: Click Account Summary
+    AccountDetails --> DepositModal: Click "Make a Deposit"
+    DepositModal --> AccountDetails: Confirm Deposit (Updates Firestore & Transactions)
+    AccountDetails --> Dashboard: Go Back
+    Dashboard --> Unauthenticated: Log Out
+```
