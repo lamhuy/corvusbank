@@ -1,0 +1,33 @@
+/* Ionic CSS Variables customized from existing React Native theme */
+:root {
+  --ion-color-primary: #FF6B6B;
+  --ion-color-primary-rgb: 255,107,107;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #e05e5e;
+  --ion-color-primary-tint: #ff7a7a;
+
+  --ion-color-secondary: #4ECDC4;
+  --ion-color-secondary-rgb: 78,205,196;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255,255,255;
+  --ion-color-secondary-shade: #44b4ac;
+  --ion-color-secondary-tint: #60d2ca;
+
+  --ion-background-color: #F7FFF7;
+  --ion-background-color-rgb: 247,255,247;
+
+  --ion-text-color: #2C3E50;
+  --ion-text-color-rgb: 44,62,80;
+
+  --ion-color-success: #A8E6CF;
+  --ion-color-success-rgb: 168,230,207;
+
+  --ion-color-danger: #FF8B94;
+  --ion-color-danger-rgb: 255,139,148;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-size: 18px; /* Kid friendly sizing */
+}

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CorvusBank</string>
+    <string name="title_activity_main">CorvusBank</string>
+    <string name="package_name">com.corvusbank.app</string>
+    <string name="custom_url_scheme">com.corvusbank.app</string>
+</resources>
