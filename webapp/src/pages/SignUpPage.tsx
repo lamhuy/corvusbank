@@ -5,7 +5,6 @@ import {
   IonCard, IonCardContent, IonCardHeader, IonCardTitle
 } from '@ionic/react';
 import { registerWithUsername } from '../services/auth';
-import { isUsernameAvailable } from '../services/db';
 import { useHistory, Link } from 'react-router-dom';
 
 const SignUpPage: React.FC = () => {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { 
   IonPage, IonHeader, IonToolbar, IonTitle, IonContent, 
-  IonButtons, IonButton, IonIcon, IonLoading, IonText, IonSpinner
+  IonButtons, IonButton, IonIcon, IonText, IonSpinner
 } from '@ionic/react';
 import { logOutOutline } from 'ionicons/icons';
 import AccountSummaryCard from '../components/AccountSummaryCard';
