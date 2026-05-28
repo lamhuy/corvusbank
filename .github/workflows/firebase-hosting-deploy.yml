@@ -25,6 +25,18 @@ jobs:
           VITE_FIREBASE_APP_ID: "1:274350897566:android:1e8c026c41afebf7203e8f"
         run: npm run build
         
+      - name: Install Firebase Functions dependencies
+        working-directory: ./firebase/functions
+        run: npm ci
+
+      - name: Deploy Firebase Functions
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CORVUSBANK }}' > service_account.json
+          npx firebase-tools deploy --only functions --project corvusbank --non-interactive
+          rm service_account.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+        
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
