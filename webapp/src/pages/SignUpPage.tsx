@@ -6,6 +6,7 @@ import {
 } from '@ionic/react';
 import { registerWithUsername } from '../services/auth';
 import { useHistory, Link } from 'react-router-dom';
+import ChaseLogo from '../components/ChaseLogo';
 
 const SignUpPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -37,7 +38,7 @@ const SignUpPage: React.FC = () => {
       if (err.code === 'auth/email-already-in-use') {
         setError('Username is already taken');
       } else {
-        setError(err.message || 'Failed to register');
+        setError(err.message || 'Failed to create account');
       }
     } finally {
       setLoading(false);
@@ -48,14 +49,18 @@ const SignUpPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>CorvusBank</IonTitle>
+          <IonTitle style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ChaseLogo size={24} color="#ffffff" style={{ verticalAlign: 'middle', marginRight: '8px' }} />
+            Chase First Banking
+          </IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent className="ion-padding" style={{ '--background': 'var(--ion-background-color)' }}>
+        <div className="ion-text-center" style={{ marginTop: '20px', marginBottom: '10px' }}>
+          <ChaseLogo size={80} color="var(--ion-color-primary)" />
+          <h2 style={{ color: 'var(--ion-color-primary)', fontWeight: 'bold', margin: '10px 0 20px 0' }}>Create an Account</h2>
+        </div>
         <IonCard>
-          <IonCardHeader>
-            <IonCardTitle>Create an Account</IonCardTitle>
-          </IonCardHeader>
           <IonCardContent>
             <form onSubmit={handleSignUp}>
               <IonItem>

@@ -9,6 +9,7 @@ import { useAuth } from '../services/authContext';
 import { subscribeToUserAccount } from '../services/db';
 import { logout } from '../services/auth';
 import { useHistory } from 'react-router-dom';
+import ChaseLogo from '../components/ChaseLogo';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -39,11 +40,10 @@ const DashboardPage: React.FC = () => {
       }
     };
 
-    const initTimeout = setTimeout(setupSubscription, 1000);
+    setupSubscription();
 
     return () => {
       if (unsubscribe) unsubscribe();
-      clearTimeout(initTimeout);
     };
   }, [user]);
 
@@ -58,7 +58,10 @@ const DashboardPage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar color="primary">
-          <IonTitle>Dashboard</IonTitle>
+          <IonTitle style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <ChaseLogo size={24} color="#ffffff" style={{ verticalAlign: 'middle', marginRight: '8px' }} />
+            Chase First Banking
+          </IonTitle>
           <IonButtons slot="end">
             {username && (
               <IonText style={{ alignSelf: 'center', marginRight: '10px', fontWeight: '500' }}>
