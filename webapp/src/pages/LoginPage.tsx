@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   IonPage, IonContent, IonHeader, IonToolbar, IonTitle, 
   IonItem, IonLabel, IonInput, IonButton, IonText, IonLoading,
-  IonCard, IonCardContent, IonCardHeader, IonCardTitle
+  IonCard, IonCardContent
 } from '@ionic/react';
 import { loginWithUsername } from '../services/auth';
 import { useHistory, Link } from 'react-router-dom';
