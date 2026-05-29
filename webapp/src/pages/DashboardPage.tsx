@@ -74,28 +74,33 @@ const DashboardPage: React.FC = () => {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent className="ion-padding" style={{ '--background': 'var(--ion-background-color)' }}>
         {loading ? (
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
-            <IonSpinner name="crescent" />
+            <IonSpinner name="crescent" color="primary" />
           </div>
         ) : error ? (
           <div style={{ padding: '20px', textAlign: 'center', color: 'var(--ion-color-danger)' }}>
             <h2>Connection Error</h2>
             <p>{error}</p>
-            <IonButton onClick={() => window.location.reload()} style={{ marginTop: '20px' }}>
+            <IonButton shape="round" onClick={() => window.location.reload()} style={{ marginTop: '20px' }}>
               Retry
             </IonButton>
           </div>
         ) : account ? (
-          <div onClick={() => history.push(`/account/${account.id}`)} style={{ cursor: 'pointer' }}>
-            <AccountSummaryCard 
-              balance={account.balance}
-              interestRate={account.interestRate}
-              ytdInterest={account.ytdInterest}
-            />
-            <div className="ion-text-center ion-margin-top">
-              <IonText color="medium">Tap card for details and transactions</IonText>
+          <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+            <div onClick={() => history.push(`/account/${account.id}`)} style={{ cursor: 'pointer', transition: 'transform 0.2s', padding: '4px 0' }}>
+              <AccountSummaryCard 
+                balance={account.balance}
+                interestRate={account.interestRate}
+                ytdInterest={account.ytdInterest}
+              />
+            </div>
+            
+            <div className="ion-text-center" style={{ marginTop: '20px' }}>
+              <IonButton fill="clear" color="primary" onClick={() => history.push(`/account/${account.id}`)}>
+                View Details & Transactions
+              </IonButton>
             </div>
           </div>
         ) : (
