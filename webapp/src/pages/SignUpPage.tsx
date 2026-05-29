@@ -51,7 +51,7 @@ const SignUpPage: React.FC = () => {
         <IonToolbar color="primary">
           <IonTitle style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <ChaseLogo size={24} color="#ffffff" style={{ verticalAlign: 'middle', marginRight: '8px' }} />
-            Chase First Banking
+            Chase Youth Bank
           </IonTitle>
         </IonToolbar>
       </IonHeader>
