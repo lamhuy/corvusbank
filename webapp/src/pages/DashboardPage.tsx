@@ -65,7 +65,7 @@ const DashboardPage: React.FC = () => {
           <IonButtons slot="end">
             {username && (
               <IonText style={{ alignSelf: 'center', marginRight: '10px', fontWeight: '500' }}>
-                Hi, {username}
+                Hi, {username.toUpperCase()}
               </IonText>
             )}
             <IonButton onClick={handleLogout}>
