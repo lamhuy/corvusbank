@@ -56,47 +56,54 @@ const SignUpPage: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" style={{ '--background': 'var(--ion-background-color)' }}>
-        <div className="ion-text-center" style={{ marginTop: '20px', marginBottom: '10px' }}>
+        <div className="ion-text-center" style={{ marginTop: '40px', marginBottom: '20px' }}>
           <img src={chaseLogo} alt="Chase Logo" style={{ height: '80px' }} />
-          <h2 style={{ color: 'var(--ion-color-primary)', fontWeight: 'bold', margin: '10px 0 20px 0' }}>Create an Account</h2>
+          <h2 style={{ color: 'var(--ion-color-primary)', fontWeight: 'bold', margin: '16px 0 30px 0' }}>Create an Account</h2>
         </div>
-        <IonCard>
-          <IonCardContent>
-            <form onSubmit={handleSignUp}>
-              <IonItem>
-                <IonLabel position="floating">Username</IonLabel>
-                <IonInput 
-                  value={username} 
-                  onIonChange={e => setUsername(e.detail.value!)} 
-                  required 
-                />
-              </IonItem>
-              <IonItem>
-                <IonLabel position="floating">4-Digit PIN</IonLabel>
-                <IonInput 
-                  type="password" 
-                  inputMode="numeric"
-                  maxlength={4}
-                  value={pin} 
-                  onIonChange={e => setPin(e.detail.value!)} 
-                  required 
-                />
-              </IonItem>
-              
-              {error && <IonText color="danger"><p>{error}</p></IonText>}
-              
-              <IonButton expand="block" type="submit" className="ion-margin-top">
-                Sign Up
-              </IonButton>
-            </form>
+        
+        <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+          <form onSubmit={handleSignUp}>
+            <IonInput 
+              label="Choose a Username" 
+              labelPlacement="floating" 
+              fill="outline"
+              value={username} 
+              onIonChange={e => setUsername(e.detail.value!)} 
+              required 
+              style={{ marginBottom: '16px', '--background': '#ffffff' }}
+            />
             
-            <div className="ion-text-center ion-margin-top">
-              <IonText color="medium">Already have an account? </IonText>
-              <Link to="/login">Login here</Link>
-            </div>
-          </IonCardContent>
-        </IonCard>
-        <IonLoading isOpen={loading} message="Creating account..." />
+            <IonInput 
+              label="Create a 4-Digit PIN"
+              labelPlacement="floating" 
+              fill="outline"
+              type="password" 
+              inputMode="numeric"
+              maxlength={4}
+              value={pin} 
+              onIonChange={e => setPin(e.detail.value!)} 
+              required 
+              style={{ marginBottom: '16px', '--background': '#ffffff' }}
+            />
+            
+            {error && (
+              <IonText color="danger">
+                <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>{error}</p>
+              </IonText>
+            )}
+            
+            <IonButton expand="block" shape="round" type="submit" style={{ height: '48px', fontWeight: 'bold' }}>
+              Create Account
+            </IonButton>
+          </form>
+          
+          <div className="ion-text-center" style={{ marginTop: '24px' }}>
+            <IonText color="medium" style={{ fontSize: '14px' }}>Already have an account? </IonText>
+            <Link to="/login" style={{ fontWeight: 'bold', textDecoration: 'none', color: 'var(--ion-color-primary)' }}>Sign in</Link>
+          </div>
+        </div>
+        
+        <IonLoading isOpen={loading} message="Creating your account..." />
       </IonContent>
     </IonPage>
   );
