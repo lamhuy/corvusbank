@@ -6,7 +6,7 @@ import {
 } from '@ionic/react';
 import { loginWithUsername } from '../services/auth';
 import { useHistory, Link } from 'react-router-dom';
-import ChaseLogo from '../components/ChaseLogo';
+import chaseLogo from '../assets/logo_chase_headerfooter.svg';
 
 const LoginPage: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -41,14 +41,14 @@ const LoginPage: React.FC = () => {
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <ChaseLogo size={24} color="#ffffff" style={{ verticalAlign: 'middle', marginRight: '8px' }} />
-            Chase Youth Bank
+            <img src={chaseLogo} alt="Chase Logo" style={{ height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
+            Youth
           </IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding" style={{ '--background': 'var(--ion-background-color)' }}>
         <div className="ion-text-center" style={{ marginTop: '20px', marginBottom: '10px' }}>
-          <ChaseLogo size={80} color="var(--ion-color-primary)" />
+          <img src={chaseLogo} alt="Chase Logo" style={{ height: '80px' }} />
           <h2 style={{ color: 'var(--ion-color-primary)', fontWeight: 'bold', margin: '10px 0 20px 0' }}>Welcome Back</h2>
         </div>
         <IonCard>

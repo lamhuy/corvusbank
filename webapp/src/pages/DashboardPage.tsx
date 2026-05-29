@@ -9,7 +9,7 @@ import { useAuth } from '../services/authContext';
 import { subscribeToUserAccount } from '../services/db';
 import { logout } from '../services/auth';
 import { useHistory } from 'react-router-dom';
-import ChaseLogo from '../components/ChaseLogo';
+import chaseLogo from '../assets/logo_chase_headerfooter.svg';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -59,8 +59,8 @@ const DashboardPage: React.FC = () => {
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <ChaseLogo size={24} color="#ffffff" style={{ verticalAlign: 'middle', marginRight: '8px' }} />
-            Chase Youth Bank
+            <img src={chaseLogo} alt="Chase Logo" style={{ height: '24px', verticalAlign: 'middle', marginRight: '8px' }} />
+            Youth
           </IonTitle>
           <IonButtons slot="end">
             {username && (
