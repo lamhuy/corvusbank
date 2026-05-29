@@ -59,7 +59,7 @@ const LoginPage: React.FC = () => {
               labelPlacement="floating" 
               fill="outline"
               value={username} 
-              onIonChange={e => setUsername(e.detail.value!)} 
+              onIonInput={e => setUsername(e.detail.value as string)} 
               required 
               style={{ marginBottom: '16px', '--background': '#ffffff' }}
             />
@@ -72,7 +72,7 @@ const LoginPage: React.FC = () => {
               inputMode="numeric"
               maxlength={4}
               value={pin} 
-              onIonChange={e => setPin(e.detail.value!)} 
+              onIonInput={e => setPin(e.detail.value as string)} 
               required 
               style={{ marginBottom: '16px', '--background': '#ffffff' }}
             />
