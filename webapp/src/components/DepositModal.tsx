@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton,
-  IonContent, IonItem, IonLabel, IonInput, IonText, IonLoading
+  IonContent, IonInput, IonText, IonLoading
 } from '@ionic/react';
 
 interface DepositModalProps {
@@ -45,36 +45,50 @@ const DepositModal: React.FC<DepositModalProps> = ({ isOpen, onClose, onDeposit 
   };
 
   return (
-    <IonModal isOpen={isOpen} onDidDismiss={onClose}>
+    <IonModal isOpen={isOpen} onDidDismiss={onClose} breakpoints={[0, 0.6, 1]} initialBreakpoint={0.6}>
       <IonHeader>
         <IonToolbar color="primary">
           <IonTitle>Make a Deposit</IonTitle>
           <IonButtons slot="end">
-            <IonButton onClick={onClose}>Close</IonButton>
+            <IonButton onClick={onClose} style={{ fontWeight: 'bold' }}>Close</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
-        <form onSubmit={handleSubmit}>
-          <IonItem>
-            <IonLabel position="floating">Amount ($)</IonLabel>
+      <IonContent className="ion-padding" style={{ '--background': 'var(--ion-background-color)' }}>
+        <div style={{ maxWidth: '400px', margin: '20px auto 0' }}>
+          <div className="ion-text-center" style={{ marginBottom: '24px' }}>
+            <h2 style={{ fontWeight: 'bold', color: 'var(--ion-color-secondary)', margin: '0 0 8px 0' }}>Add Funds</h2>
+            <p style={{ color: '#666', margin: 0, fontSize: '14px' }}>Enter the amount you wish to deposit.</p>
+          </div>
+          
+          <form onSubmit={handleSubmit}>
             <IonInput 
+              label="Amount ($)" 
+              labelPlacement="floating" 
+              fill="outline"
               type="number" 
               inputMode="decimal"
               step="0.01"
               min="0.01"
               max="10000"
               value={amountStr} 
-              onIonChange={e => setAmountStr(e.detail.value!)} 
+              onIonInput={e => setAmountStr(e.detail.value as string)} 
               required 
+              style={{ marginBottom: '16px', '--background': '#ffffff' }}
             />
-          </IonItem>
-          {error && <IonText color="danger"><p>{error}</p></IonText>}
-          <IonButton expand="block" type="submit" className="ion-margin-top">
-            Confirm Deposit
-          </IonButton>
-        </form>
-        <IonLoading isOpen={loading} message="Processing..." />
+            
+            {error && (
+              <IonText color="danger">
+                <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>{error}</p>
+              </IonText>
+            )}
+            
+            <IonButton expand="block" shape="round" type="submit" style={{ height: '48px', fontWeight: 'bold' }}>
+              Confirm Deposit
+            </IonButton>
+          </form>
+        </div>
+        <IonLoading isOpen={loading} message="Processing deposit..." />
       </IonContent>
     </IonModal>
   );
