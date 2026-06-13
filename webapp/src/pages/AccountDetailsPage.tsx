@@ -5,7 +5,7 @@ import {
 } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import { useParams } from 'react-router-dom';
-import { subscribeToUserAccount, subscribeToTransactions, processDeposit } from '../services/db';
+import { subscribeToAccount, subscribeToTransactions, processDeposit } from '../services/db';
 import { useAuth } from '../services/authContext';
 import { formatCurrency } from '../utils/finance';
 import TransactionList from '../components/TransactionList';
@@ -22,21 +22,11 @@ const AccountDetailsPage: React.FC = () => {
   useEffect(() => {
     if (!user || !accountId) return;
     
-    let unsubAccount: any = () => {};
-    
-    // Subscribe to account
-    const setupAccountSub = async () => {
-      const unsub = await subscribeToUserAccount(user.uid, (data) => {
-        if (data && data.id === accountId) {
-          setAccount(data);
-        }
-        setLoading(false);
-      });
-      if (typeof unsub === 'function') {
-        unsubAccount = unsub;
-      }
-    };
-    setupAccountSub();
+    // Subscribe to this specific account by ID
+    const unsubAccount = subscribeToAccount(accountId, (data) => {
+      setAccount(data);
+      setLoading(false);
+    });
 
     // Subscribe to transactions
     const unsubTx = subscribeToTransactions(accountId, (data) => {
@@ -53,6 +43,9 @@ const AccountDetailsPage: React.FC = () => {
     await processDeposit(accountId, amountInCents);
   };
 
+  const isChecking = account?.type === 'CHECKING';
+  const accountTitle = isChecking ? 'Chase Checkings℠' : 'Chase Savings℠';
+
   return (
     <IonPage>
       <IonHeader>
@@ -60,7 +53,7 @@ const AccountDetailsPage: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/dashboard" />
           </IonButtons>
-          <IonTitle>Account Details</IonTitle>
+          <IonTitle>{loading ? 'Account Details' : accountTitle}</IonTitle>
           <IonButtons slot="end">
             <IonButton onClick={() => setShowModal(true)}>
               <IonIcon slot="icon-only" icon={addOutline} />
@@ -84,7 +77,9 @@ const AccountDetailsPage: React.FC = () => {
                 textAlign: 'center',
                 marginBottom: '24px'
               }}>
-                <p style={{ color: '#666', fontSize: '14px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 12px 0' }}>Current Balance</p>
+                <p style={{ color: '#666', fontSize: '14px', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 12px 0' }}>
+                  {isChecking ? 'Checking Balance' : 'Savings Balance'}
+                </p>
                 <h1 style={{ fontSize: '3.5rem', fontWeight: 'bold', margin: '0 0 24px 0', color: 'var(--ion-color-secondary)' }}>
                   {formatCurrency(account.balance)}
                 </h1>

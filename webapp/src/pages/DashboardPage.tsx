@@ -6,7 +6,7 @@ import {
 import { logOutOutline } from 'ionicons/icons';
 import AccountSummaryCard from '../components/AccountSummaryCard';
 import { useAuth } from '../services/authContext';
-import { subscribeToUserAccount } from '../services/db';
+import { subscribeToUserAccounts, ensureCheckingAccount, ensureSavingsType } from '../services/db';
 import { logout } from '../services/auth';
 import { useHistory } from 'react-router-dom';
 import chaseLogo from '../assets/logo_chase_headerfooter.svg';
@@ -14,33 +14,42 @@ import chaseLogo from '../assets/logo_chase_headerfooter.svg';
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const history = useHistory();
-  const [account, setAccount] = useState<any>(null);
+  const [accounts, setAccounts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
 
-    let unsubscribe: any = () => {};
+    let unsubscribe: (() => void) | null = null;
 
-    const setupSubscription = async () => {
+    const setup = async () => {
       setLoading(true);
       setError(null);
-      const unsub = await subscribeToUserAccount(user.uid, (data, err) => {
+
+      try {
+        // Migrations for existing users:
+        // 1. Tag old accounts that have no type field as SAVINGS
+        await ensureSavingsType(user.uid);
+        // 2. Create a CHECKING account if one doesn't exist yet
+        await ensureCheckingAccount(user.uid);
+      } catch (err) {
+        console.error("Migration error:", err);
+      }
+
+      // Subscribe to ALL accounts
+      unsubscribe = subscribeToUserAccounts(user.uid, (data, err) => {
         if (err) {
-          setError(err.message || "Permission Denied. Please clear browser IndexedDB cache and reload.");
+          setError(err.message || "Permission Denied. Please clear browser cache and reload.");
           setLoading(false);
           return;
         }
-        setAccount(data);
+        setAccounts(data);
         setLoading(false);
       });
-      if (typeof unsub === 'function') {
-        unsubscribe = unsub;
-      }
     };
 
-    setupSubscription();
+    setup();
 
     return () => {
       if (unsubscribe) unsubscribe();
@@ -53,6 +62,15 @@ const DashboardPage: React.FC = () => {
   };
 
   const username = user?.email?.split('@')[0] || '';
+
+  // Sort: Savings first, Checking second
+  const sortedAccounts = [...accounts].sort((a, b) => {
+    const typeA = a.type || 'SAVINGS';
+    const typeB = b.type || 'SAVINGS';
+    if (typeA === 'SAVINGS' && typeB === 'CHECKING') return -1;
+    if (typeA === 'CHECKING' && typeB === 'SAVINGS') return 1;
+    return 0;
+  });
 
   return (
     <IonPage>
@@ -87,25 +105,29 @@ const DashboardPage: React.FC = () => {
               Retry
             </IonButton>
           </div>
-        ) : account ? (
+        ) : sortedAccounts.length > 0 ? (
           <div style={{ maxWidth: '600px', margin: '0 auto' }}>
-            <div onClick={() => history.push(`/account/${account.id}`)} style={{ cursor: 'pointer', transition: 'transform 0.2s', padding: '4px 0' }}>
-              <AccountSummaryCard 
-                balance={account.balance}
-                interestRate={account.interestRate}
-                ytdInterest={account.ytdInterest}
-              />
-            </div>
-            
-            <div className="ion-text-center" style={{ marginTop: '20px' }}>
-              <IonButton fill="clear" color="primary" onClick={() => history.push(`/account/${account.id}`)}>
-                View Details & Transactions
-              </IonButton>
-            </div>
+            <h2 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--ion-color-secondary)', marginTop: '8px', marginBottom: '4px' }}>
+              My Accounts
+            </h2>
+            {sortedAccounts.map(acc => (
+              <div 
+                key={acc.id} 
+                onClick={() => history.push(`/account/${acc.id}`)} 
+                style={{ cursor: 'pointer', padding: '4px 0' }}
+              >
+                <AccountSummaryCard 
+                  balance={acc.balance}
+                  interestRate={acc.interestRate}
+                  ytdInterest={acc.ytdInterest}
+                  type={acc.type || 'SAVINGS'}
+                />
+              </div>
+            ))}
           </div>
         ) : (
           <IonText color="danger">
-            <p className="ion-text-center">No account found.</p>
+            <p className="ion-text-center">No accounts found.</p>
           </IonText>
         )}
       </IonContent>
