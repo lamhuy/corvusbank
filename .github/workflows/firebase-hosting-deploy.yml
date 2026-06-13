@@ -1,0 +1,45 @@
+name: Deploy to Firebase Hosting on merge
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        working-directory: ./webapp
+        run: npm ci
+        
+      - name: Build Web App
+        working-directory: ./webapp
+        env:
+          VITE_FIREBASE_API_KEY: "AIzaSyA1Ahsonj1SDlZX_5npXzlt4QGfghUUcjk"
+          VITE_FIREBASE_AUTH_DOMAIN: "corvusbank.firebaseapp.com"
+          VITE_FIREBASE_PROJECT_ID: "corvusbank"
+          VITE_FIREBASE_STORAGE_BUCKET: "corvusbank.firebasestorage.app"
+          VITE_FIREBASE_MESSAGING_SENDER_ID: "274350897566"
+          VITE_FIREBASE_APP_ID: "1:274350897566:android:1e8c026c41afebf7203e8f"
+        run: npm run build
+        
+      - name: Install Firebase Functions dependencies
+        working-directory: ./firebase/functions
+        run: npm ci
+
+      - name: Deploy Firebase Functions
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CORVUSBANK }}' > service_account.json
+          npx firebase-tools deploy --only functions --project corvusbank --non-interactive
+          rm service_account.json
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: service_account.json
+        
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CORVUSBANK }}'
+          channelId: live
+          projectId: corvusbank

@@ -1,0 +1,39 @@
+/* Ionic CSS Variables customized from existing React Native theme */
+:root {
+  /* Chase Blue */
+  --ion-color-primary: #117aca;
+  --ion-color-primary-rgb: 17,122,202;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #0f6bb2;
+  --ion-color-primary-tint: #2988cf;
+
+  /* Secondary/Accent (Dark Navy) */
+  --ion-color-secondary: #1a1a1a;
+  --ion-color-secondary-rgb: 26,26,26;
+  --ion-color-secondary-contrast: #ffffff;
+  --ion-color-secondary-contrast-rgb: 255,255,255;
+  --ion-color-secondary-shade: #171717;
+  --ion-color-secondary-tint: #313131;
+
+  /* Background */
+  --ion-background-color: #f4f6f8;
+  --ion-background-color-rgb: 244,246,248;
+
+  /* Text */
+  --ion-text-color: #1a1a1a;
+  --ion-text-color-rgb: 26,26,26;
+
+  /* Success (Green) */
+  --ion-color-success: #2e8540;
+  --ion-color-success-rgb: 46,133,64;
+
+  /* Danger (Red) */
+  --ion-color-danger: #d93025;
+  --ion-color-danger-rgb: 217,48,37;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-size: 18px; /* Kid friendly sizing */
+}
